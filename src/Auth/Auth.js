@@ -2,6 +2,8 @@ import history from '../utils/history';
 import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from './auth0-variables';
 
+const devRedirectUri = 'http://localhost:3000/authcallback';
+
 export default class Auth {
   accessToken;
   idToken;
@@ -10,7 +12,10 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: AUTH_CONFIG.domain,
     clientID: AUTH_CONFIG.clientId,
-    redirectUri: AUTH_CONFIG.callbackUrl,
+    redirectUri:
+      process.env.NODE_ENV === 'development'
+        ? devRedirectUri
+        : AUTH_CONFIG.callbackUrl,
     responseType: 'token id_token',
     scope: 'openid',
   });
