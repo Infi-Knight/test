@@ -1,24 +1,27 @@
 import React from 'react';
-import { toaster, ToasterContainer, PLACEMENT } from 'baseui/toast';
 import { Button } from 'baseui/button';
 
-class ToasterExample extends React.Component {
-  add = () => {
-    toaster.info('WIP, stay tuned😁', {
-      autoHideDuration: 5000,
-    });
-  };
+const Home = props => {
+  const login = () => props.auth.login();
+  const logout = () => props.auth.logout();
+  const { isAuthenticated } = props.auth;
 
-  render() {
-    return <Button onClick={this.add}>Progress ?</Button>;
-  }
-}
-
-const Home = () => (
-  <React.Fragment>
-    <ToasterContainer placement={PLACEMENT.bottomRight} />
-    <ToasterExample />
-  </React.Fragment>
-);
+  return (
+    <div>
+      Hi, there.
+      {isAuthenticated() && (
+        <div>
+          You are logged in
+          <Button onClick={logout}>Log out</Button>
+        </div>
+      )}
+      {!isAuthenticated() && (
+        <div>
+          You are not logged in! <Button onClick={login}>Log In</Button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default Home;
