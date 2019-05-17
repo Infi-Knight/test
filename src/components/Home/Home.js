@@ -1,25 +1,13 @@
 import React from 'react';
 import { Button } from 'baseui/button';
+// import { Link } from 'react-router-dom';
+// import { graphql } from 'react-apollo';
+// import gql from 'graphql-tag';
 
-const Home = props => {
-  const login = () => props.auth.login();
-  const logout = () => props.auth.logout();
-  const { isAuthenticated } = props.auth;
-
+const Home = () => {
   return (
     <div>
-      Hi, there.
-      {isAuthenticated() && (
-        <div>
-          You are logged in
-          <Button onClick={logout}>Log out</Button>
-        </div>
-      )}
-      {!isAuthenticated() && (
-        <div>
-          You are not logged in! <Button onClick={login}>Log In</Button>
-        </div>
-      )}
+      <Button>A dumb button</Button>
     </div>
   );
 };
