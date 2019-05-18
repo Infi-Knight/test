@@ -7,7 +7,7 @@
  * @param {string} queryName Name of the query e.g 'posts'
  * @param {boolean} [false] Log complete json data fetched from graphql query
  */
-const logPostsFetch = (props, queryName, logCompleteResult = false) => {
+const logQueryResult = (props, queryName, logCompleteResult = false) => {
   if (logCompleteResult) {
     console.log(props.data);
   }
