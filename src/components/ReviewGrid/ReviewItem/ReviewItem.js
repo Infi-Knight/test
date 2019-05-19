@@ -4,7 +4,7 @@ import { Card, StyledBody } from 'baseui/card';
 const ReviewItem = props => {
   return (
     <Card
-      overrides={{ Root: { style: { width: '328px' } } }}
+      overrides={{ Root: { style: { width: '320px' } } }}
       headerImage={props.image}
       title={props.title}
     >
