@@ -1,7 +1,12 @@
 header {
-  display: flex;
-  justify-content: center;
   margin-bottom: 1rem;
+}
+
+.HeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 2rem;
 }
 
 a {
@@ -14,6 +19,13 @@ a {
   font-size: 2rem;
 }
 
-.LoginButton {
-  margin-right: 1rem;
+@media screen and (max-width: 400px) {
+  .HeaderContainer {
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+  .Button {
+    margin: 1rem 0;
+  }
 }

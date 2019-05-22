@@ -11,7 +11,7 @@ import HeaderStyles from './Header.module.css';
 
 const Header = () => (
   <header>
-    <HeaderNavigation>
+    <HeaderNavigation className={HeaderStyles.HeaderContainer}>
       <NavigationList align={ALIGN.left}>
         <NavigationItem>
           <NavLink className={HeaderStyles.Brand} to="/">
@@ -23,7 +23,13 @@ const Header = () => (
       <NavigationList align={ALIGN.right}>
         <NavigationItem>
           <NavLink to="/login">
-            <Button className={HeaderStyles.LoginButton}>Login</Button>
+            <Button className={HeaderStyles.Button}>Login</Button>
+          </NavLink>
+        </NavigationItem>
+
+        <NavigationItem>
+          <NavLink to="/dashboard">
+            <Button className={HeaderStyles.Button}>Dashboard</Button>
           </NavLink>
         </NavigationItem>
       </NavigationList>

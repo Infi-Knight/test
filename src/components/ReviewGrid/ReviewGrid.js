@@ -9,9 +9,7 @@ const ReviewGrid = props => {
         <ReviewItem
           key={post.id}
           title={post.title}
-          image={`https://media.graphcms.com/resize=w:328,h:328,fit:crop/${
-            post.image.handle
-          }`}
+          image={post.image}
           body={post.body}
         />
       ))}

@@ -53,9 +53,7 @@ export const posts = gql`
       reviewer {
         username
       }
-      image {
-        handle
-      }
+      image
     }
     postsConnection {
       aggregate {
