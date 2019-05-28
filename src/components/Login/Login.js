@@ -1,62 +1,71 @@
-import React from 'react';
-import { AUTH_TOKEN } from '../../constants';
+import React, { useState, useContext } from 'react';
+import AuthContext from '../Auth';
 
-class Login extends React.Component {
-  state = {
-    login: true,
-    username: '',
-    password: '',
-  };
+function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
+  const [login, setLogin] = useState(true);
+  const [error, setError] = useState('');
 
-  componentDidMount() {
-    console.log('Login', this.state.login);
+  const { authenticated, setAuthenticated } = useContext(AuthContext);
+
+  async function _handleSubmit(e) {
+    e.preventDefault();
+    if (!login) {
+      if (password !== password2) {
+        setError('Passwords do not match');
+      }
+      // TODO: Signup logic
+    } else {
+      // TODO login logic
+    }
   }
 
-  componentDidUpdate() {
-    console.log('Login', this.state.login);
-  }
-
-  render() {
-    const { login, username, password } = this.state;
-    return (
-      <div>
-        <h4>{login ? 'Login' : 'Signup'}</h4>
+  return (
+    <div>
+      <h4>{login ? 'Login' : 'Signup'}</h4>
+      <h5>{error}</h5>
+      <form onSubmit={_handleSubmit}>
         <div>
+          <label htmlFor="username">Username:</label>
           <input
-            value={username}
-            onChange={e => this.setState({ username: e.target.value })}
+            onChange={e => setUsername(e.target.value)}
             type="text"
-            placeholder="Username"
-          />
-
-          <input
-            value={password}
-            onChange={e => this.setState({ password: e.target.value })}
-            type="password"
-            placeholder="Password"
+            id="username"
+            name="username"
           />
         </div>
 
         <div>
-          <button onClick={() => this._confirm()}>
-            {login ? 'login' : 'create account'}
-          </button>
-          <button onClick={() => this.setState({ login: !login })}>
-            {login ? 'need to create an account?' : 'already have an account?'}
-          </button>
+          <label htmlFor="password">Password:</label>
+          <input
+            onChange={e => setPassword(e.target.value)}
+            type="password"
+            id="password"
+            name="password"
+          />
         </div>
-      </div>
-    );
-  }
 
-  _confirm = async () => {
-    console.log('confirmed');
-    console.log('Login: ', this.state.login);
-  };
+        {!login && (
+          <div>
+            <label htmlFor="password2">Confirm Password:</label>
+            <input
+              onChange={e => setPassword2(e.target.value)}
+              type="password"
+              id="password2"
+              name="password2"
+            />
+          </div>
+        )}
 
-  _saveUserData = username => {
-    localStorage.setItem(AUTH_TOKEN, username);
-  };
+        <button onClick={e => setLogin(!login)}>
+          {login ? 'Need a new account ?' : 'Already signed up ?'}
+        </button>
+        <button type="submit"> {login ? 'Login' : 'Signup'} </button>
+      </form>
+    </div>
+  );
 }
 
 export default Login;

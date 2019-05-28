@@ -1,25 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
+import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
+import { setContext } from 'apollo-link-context';
 
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const GRAPHCMS_API =
-  'https://api-euwest.graphcms.com/v1/cjvfi3g7x1sqf01eta863e9bz/master';
+import { AuthProvider } from './components/Auth';
+import { AUTH_TOKEN, GRAPHCMS_API } from './constants';
+
+const httpLink = createHttpLink({
+  uri: GRAPHCMS_API,
+});
+
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: `Bearer ${AUTH_TOKEN}`,
+    },
+  };
+});
 
 const client = new ApolloClient({
-  link: new HttpLink({ uri: GRAPHCMS_API }),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </ApolloProvider>,
   document.getElementById('root')
 );
