@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState(null);
+  const prevAuthenticated = localStorage.getItem('authenticated');
+  const [authenticated, setAuthenticated] = useState(prevAuthenticated);
 
   useEffect(() => {
     localStorage.setItem('authenticated', authenticated);
