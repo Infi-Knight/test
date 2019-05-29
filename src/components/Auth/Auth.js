@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-  const prevAuthenticated = localStorage.getItem('authenticated');
+  const prevAuthenticated = window.localStorage.getItem('authenticated') || '';
   const [authenticated, setAuthenticated] = useState(prevAuthenticated);
 
   useEffect(() => {
-    localStorage.setItem('authenticated', authenticated);
+    window.localStorage.setItem('authenticated', authenticated);
   }, [authenticated]);
 
   const defaultContext = {
