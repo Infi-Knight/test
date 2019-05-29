@@ -10,6 +10,7 @@
     "baseui": "6.17.2",
     "graphql": "14.3.0",
     "graphql-tag": "2.10.1",
+    "history": "4.9.0",
     "react": "^16.8.6",
     "react-apollo": "2.5.5",
     "react-dom": "^16.8.6",
