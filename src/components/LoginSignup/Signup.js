@@ -31,6 +31,13 @@ const Signup = props => {
     }
   };
 
+  const _handleGraphQlError = () => {
+    setError('An error occured during signup, try using a different username');
+    setUsername('');
+    setPassword('');
+    setPassword2('');
+  };
+
   return (
     <div>
       <h1>Signup</h1>
@@ -70,6 +77,7 @@ const Signup = props => {
         <Mutation
           mutation={SIGNUP_MUTATION}
           variables={{ input: { username, password, status: 'PUBLISHED' } }}
+          onError={() => _handleGraphQlError()}
           onCompleted={data => {
             setAuthenticated(data.createReviewer.id);
             props.history.push('/dashboard');
