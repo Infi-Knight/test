@@ -6,14 +6,8 @@ import AuthContext from '../Auth';
 const REVIEWER_LOGIN_QUERY = gql`
   query reviewerLoginQuery($input: ReviewerWhereUniqueInput!) {
     reviewer(where: $input) {
-      username
       password
       id
-      posts {
-        title
-        body
-        image
-      }
     }
   }
 `;
