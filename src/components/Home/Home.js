@@ -72,6 +72,7 @@ export default graphql(posts, {
   options: {
     variables: postQueryVars,
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   },
   props: ({ data }) => ({
     data,
