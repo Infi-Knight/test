@@ -27,8 +27,10 @@ const Dashboard = () => {
         query={FETCH_REVIEWER_POSTS_QUERY}
         variables={{ input: { id: authenticated } }}
         notifyOnNetworkStatusChange
+        fetchPolicy="cache-and-network"
       >
         {({ loading, error, data, refetch, networkStatus }) => {
+          // refetch();
           if (networkStatus === 4) return 'Refreshing!';
           if (loading) return null;
           if (error) return `Error! ${error.message}`;

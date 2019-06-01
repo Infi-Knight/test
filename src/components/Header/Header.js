@@ -44,6 +44,12 @@ const Header = props => {
           </NavigationItem>
 
           <NavigationItem>
+            <NavLink to="/create">
+              <Button className={HeaderStyles.Button}>Write a review</Button>
+            </NavLink>
+          </NavigationItem>
+
+          <NavigationItem>
             <NavLink to="/dashboard">
               <Button className={HeaderStyles.Button}>Dashboard</Button>
             </NavLink>

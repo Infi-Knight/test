@@ -6,6 +6,7 @@ import Header from '../Header';
 import Home from '../Home';
 import PrivateRoute from '../Auth/PrivateRoute';
 import Dashboard from '../Dashboard';
+import CreateReview from '../CreateReview';
 import LoginSignup from '../LoginSignup';
 import Error404 from '../Error404';
 
@@ -16,6 +17,7 @@ const AppRouter = () => (
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/login" exact component={LoginSignup} />
+        <PrivateRoute path="/create" component={CreateReview} />
         <PrivateRoute path="/dashboard" component={Dashboard} />
         <Route component={Error404} />
       </Switch>
