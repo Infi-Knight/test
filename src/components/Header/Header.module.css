@@ -1,31 +1,68 @@
-header {
-  margin-bottom: 1rem;
+.Header {
+  width: 100%;
+  padding: 1rem 0;
+  z-index: 100;
+  padding-bottom: 1rem;
 }
 
-.HeaderContainer {
+.HeaderGroup {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   flex-wrap: wrap;
-  padding: 2rem;
 }
 
-a {
+.HeaderRow {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  justify-items: center;
+}
+
+.Header a {
+  margin: 0.5rem 1rem;
   text-decoration: none;
+  font-weight: 700;
 }
 
 .Brand {
-  color: #d0021b;
-  font-weight: 700;
   font-size: 2rem;
+  color: #d0021b;
 }
 
-@media screen and (max-width: 400px) {
-  .HeaderContainer {
-    justify-content: space-between;
-    padding: 1rem;
+.Header button {
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  background: white;
+  color: #d0021b;
+  font-weight: 700;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid #d0021b;
+  cursor: pointer;
+}
+
+.Header button:hover {
+  background: #d0021b;
+  color: white;
+}
+
+@media (max-width: 425px) {
+  .Header {
+    padding: 15px 0;
   }
 
-  .Button {
-    margin: 1rem 0;
+  .Header button {
+    font-size: 0.7rem;
   }
+
+  .HeaderGroup {
+    grid-template-columns: repeat(3, auto);
+  }
+  /* 
+  .Header a:nth-child(4) {
+    display: none;
+  } */
 }
