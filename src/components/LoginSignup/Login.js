@@ -12,12 +12,22 @@ const REVIEWER_LOGIN_QUERY = gql`
   }
 `;
 
+const ADMIN_LOGIN_QUERY = gql`
+  query adminLoginQuery($input: AdminWhereUniqueInput!) {
+    admin(where: $input) {
+      password
+      id
+    }
+  }
+`;
+
 const Login = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState('');
-  const { setAuthenticated } = useContext(AuthContext);
+  const [adminChecked, setAdminChecked] = useState(false);
+  const { setAuthenticated, setScope } = useContext(AuthContext);
 
   const _handleSubmit = (e, client) => {
     e.preventDefault();
@@ -25,7 +35,7 @@ const Login = props => {
     // ApolloConsumer doesn't provide any error handling
     client
       .query({
-        query: REVIEWER_LOGIN_QUERY,
+        query: adminChecked ? ADMIN_LOGIN_QUERY : REVIEWER_LOGIN_QUERY,
         variables: { input: { username } },
       })
       .then(queryResult => _handleLogin(queryResult))
@@ -39,9 +49,11 @@ const Login = props => {
     } else {
       if (data) {
         setLoggingIn(false);
-        const returnedPassword = data.reviewer.password;
+        const user = adminChecked ? data.admin : data.reviewer;
+        const returnedPassword = user.password;
         if (returnedPassword === password) {
-          setAuthenticated(data.reviewer.id);
+          setAuthenticated(user.id);
+          setScope(adminChecked ? 'admin' : 'reviewer');
           props.history.push('/dashboard');
         } else {
           setError('Invalid credentials');
@@ -54,7 +66,7 @@ const Login = props => {
 
   const _handleLoginError = () => {
     setLoggingIn(false);
-    setError('Error logging in: check credentials and your network connection');
+    setError('Error logging in: check your credentials and network connection');
     setPassword('');
   };
 
@@ -87,6 +99,17 @@ const Login = props => {
                   value={password}
                 />
               </div>
+
+              <div>
+                <label htmlFor="scope">Login as admin?</label>
+                <input
+                  onChange={() => setAdminChecked(!adminChecked)}
+                  type="checkbox"
+                  id="scope"
+                  checked={adminChecked ? true : false}
+                />
+              </div>
+
               <button type="submit">Login</button>
             </form>
           </div>

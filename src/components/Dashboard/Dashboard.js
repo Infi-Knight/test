@@ -3,6 +3,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import AuthContext from '../Auth';
 import ReviewGrid from '../ReviewGrid';
+import { posts, postQueryVars } from '../Home/Home';
 
 const FETCH_REVIEWER_POSTS_QUERY = gql`
   query fetchReviewerPostsQuery($input: ReviewerWhereUniqueInput!) {
@@ -19,25 +20,24 @@ const FETCH_REVIEWER_POSTS_QUERY = gql`
 `;
 
 const Dashboard = () => {
-  const { authenticated } = useContext(AuthContext);
-
+  const { authenticated, scope } = useContext(AuthContext);
+  const admin = scope === 'admin' ? true : false;
   return (
     <div>
       <Query
-        query={FETCH_REVIEWER_POSTS_QUERY}
-        variables={{ input: { id: authenticated } }}
+        query={admin ? posts : FETCH_REVIEWER_POSTS_QUERY}
+        variables={admin ? postQueryVars : { input: { id: authenticated } }}
         notifyOnNetworkStatusChange
         fetchPolicy="cache-and-network"
       >
         {({ loading, error, data, refetch, networkStatus }) => {
-          // refetch();
           if (networkStatus === 4) return 'Refreshing!';
           if (loading) return null;
           if (error) return `Error! ${error.message}`;
           return (
             <div>
               <button onClick={() => refetch()}>Refresh dashboard</button>
-              <ReviewGrid posts={data.reviewer.posts} />
+              <ReviewGrid posts={admin ? data.posts : data.reviewer.posts} />
             </div>
           );
         }}

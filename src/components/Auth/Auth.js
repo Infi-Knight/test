@@ -4,15 +4,20 @@ const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
   const prevAuthenticated = window.localStorage.getItem('authenticated') || '';
+  const preScope = window.localStorage.getItem('scope') || '';
   const [authenticated, setAuthenticated] = useState(prevAuthenticated);
+  const [scope, setScope] = useState(preScope); // scope can be 'admin' or 'reviewer'
 
   useEffect(() => {
     window.localStorage.setItem('authenticated', authenticated);
-  }, [authenticated]);
+    window.localStorage.setItem('scope', scope);
+  }, [authenticated, scope]);
 
   const defaultContext = {
     authenticated,
     setAuthenticated,
+    scope,
+    setScope,
   };
 
   return (
