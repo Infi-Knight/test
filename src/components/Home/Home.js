@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'baseui/button';
+import { Button, SIZE } from 'baseui/button';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -9,7 +9,7 @@ import HomeStyles from './Home.module.css';
 /* TODO: comment out this logger when in production */
 // import logQueryResult from '../../utils/dev/logQueryResult';
 
-const POSTS_PER_PAGE = 4;
+const POSTS_PER_PAGE = 6;
 
 const Home = props => {
   // logQueryResult(props, 'posts', true); // TODO: comment out  in production
@@ -23,12 +23,20 @@ const Home = props => {
   }
 
   if (posts && postsConnection) {
-    const areMorePosts = posts.length < postsConnection.aggregate.count;
+    const totalPublishedPosts = postsConnection.edges.filter(
+      edge => edge.status === 'PUBLISHED'
+    ).length;
+    const areMorePosts = posts.length < totalPublishedPosts;
+
     return (
       <section>
         <div className={HomeStyles.LoadMoreButton}>
           {areMorePosts ? (
-            <Button disabled={loading} onClick={() => showMoreReviews()}>
+            <Button
+              size={SIZE.compact}
+              disabled={loading}
+              onClick={() => showMoreReviews()}
+            >
               {loading ? 'Loading...' : 'Load more reviews'}
             </Button>
           ) : (
@@ -45,8 +53,8 @@ const Home = props => {
 };
 
 export const posts = gql`
-  query posts($first: Int!, $skip: Int!) {
-    posts(orderBy: title_ASC, first: $first, skip: $skip) {
+  query posts($input: PostWhereInput!, $first: Int!, $skip: Int!) {
+    posts(where: $input, orderBy: title_ASC, first: $first, skip: $skip) {
       title
       body
       id
@@ -56,14 +64,17 @@ export const posts = gql`
       image
     }
     postsConnection {
-      aggregate {
-        count
+      edges {
+        node {
+          status
+        }
       }
     }
   }
 `;
 
 export const postQueryVars = {
+  input: { status: 'PUBLISHED' },
   skip: 0,
   first: POSTS_PER_PAGE,
 };
