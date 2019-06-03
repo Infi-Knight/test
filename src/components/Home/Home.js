@@ -57,6 +57,8 @@ export const posts = gql`
     posts(where: $input, orderBy: title_ASC, first: $first, skip: $skip) {
       title
       body
+      likes
+      views
       id
       reviewer {
         username

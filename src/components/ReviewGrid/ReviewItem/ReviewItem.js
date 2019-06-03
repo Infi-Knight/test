@@ -1,29 +1,29 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Card, StyledBody, StyledAction, StyledThumbnail } from 'baseui/card';
-import { Button, SIZE } from 'baseui/button';
-import './ReviewItem.module.css';
+import { Card, StyledBody, StyledThumbnail } from 'baseui/card';
+import ReviewItemStyles from './ReviewItem.module.css';
 
 const ReviewItem = props => {
   return (
-    <Card
-      overrides={{
-        Root: {
-          style: { width: '320px' },
-        },
-      }}
-      title={props.title}
-    >
-      <StyledThumbnail src={props.image} />
-      <StyledBody>{`${props.body.substring(0, 64)}...`}</StyledBody>
-      <StyledAction>
-        <NavLink to={`/review/${props.id}`}>
-          <Button size={SIZE.compact} style={{ width: '100%' }}>
-            More info
-          </Button>
-        </NavLink>
-      </StyledAction>
-    </Card>
+    <NavLink to={`/review/${props.id}`}>
+      <Card
+        overrides={{
+          Root: {
+            style: { width: '300px' },
+          },
+        }}
+        title={props.title}
+      >
+        <StyledThumbnail src={props.image} />
+        <StyledBody>
+          {`${props.body.substring(0, 140)}...`}
+          <div className={ReviewItemStyles.LikeViewContainer}>
+            <div>Views: {props.views ? props.views : 0}</div>
+            <div>Likes: {props.likes ? props.likes : 0}</div>
+          </div>
+        </StyledBody>
+      </Card>
+    </NavLink>
   );
 };
 
