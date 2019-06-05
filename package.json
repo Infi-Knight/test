@@ -8,6 +8,7 @@
     "apollo-link-context": "1.0.17",
     "apollo-link-http": "1.5.14",
     "baseui": "6.17.2",
+    "dayjs": "1.8.14",
     "graphql": "14.3.0",
     "graphql-tag": "2.10.1",
     "history": "4.9.0",
