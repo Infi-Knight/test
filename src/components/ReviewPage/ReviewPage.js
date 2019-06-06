@@ -34,7 +34,6 @@ const ReviewPage = ({ match }) => {
           if (loading) return null;
           if (error) return `Error! ${error.message}`;
           const { title, body, image, reviewer, likes, createdAt } = data.post;
-          const postCreatedAt = new Date(createdAt);
           return (
             <div className={ReviewPageStyles.ReviewContainer}>
               <div className={ReviewPageStyles.Card}>

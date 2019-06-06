@@ -1,7 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { FormControl } from 'baseui/form-control';
+import { StatefulInput, SIZE } from 'baseui/input';
+import { Notification, KIND } from 'baseui/notification';
 
+import SignupStyles from './LoginSignup.module.css';
 import AuthContext from '../Auth';
 
 const SIGNUP_MUTATION = gql`
@@ -40,39 +44,42 @@ const Signup = props => {
 
   return (
     <div>
-      <h1>Signup</h1>
-      <h4>{error}</h4>
-      <form>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
+      {error && (
+        <Notification closeable kind={KIND.negative}>
+          {error}
+        </Notification>
+      )}
+      <form className={SignupStyles.Form}>
+        <FormControl label="Username">
+          <StatefulInput
             autoFocus
-            onChange={e => setUsername(e.target.value)}
+            startEnhancer="@"
             type="text"
-            id="username"
+            onChange={e => setUsername(e.target.value)}
             value={username}
+            size={SIZE.compact}
           />
-        </div>
+        </FormControl>
 
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
+        <FormControl label="Password">
+          <StatefulInput
+            startEnhancer="$"
+            type="password"
             onChange={e => setPassword(e.target.value)}
-            type="password"
-            id="password"
             value={password}
+            size={SIZE.compact}
           />
-        </div>
+        </FormControl>
 
-        <div>
-          <label htmlFor="password2">Confirm Password:</label>
-          <input
-            onChange={e => setPassword2(e.target.value)}
+        <FormControl label="Confirm password">
+          <StatefulInput
+            startEnhancer="$"
             type="password"
-            id="password2"
+            onChange={e => setPassword2(e.target.value)}
             value={password2}
+            size={SIZE.compact}
           />
-        </div>
+        </FormControl>
 
         <Mutation
           mutation={SIGNUP_MUTATION}
@@ -91,6 +98,11 @@ const Signup = props => {
                 _validateForm(signupMutation);
               }}
             >
+              <i
+                style={{ marginRight: '0.5rem' }}
+                className="fa fa-user-plus"
+                aria-hidden="true"
+              />
               Signup
             </button>
           )}

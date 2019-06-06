@@ -1,6 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
+import { FormControl } from 'baseui/form-control';
+import { StatefulInput, SIZE } from 'baseui/input';
+import { Notification, KIND } from 'baseui/notification';
+import { StatefulCheckbox } from 'baseui/checkbox';
+
+import LoginStyles from './LoginSignup.module.css';
 import AuthContext from '../Auth';
 
 const REVIEWER_LOGIN_QUERY = gql`
@@ -31,15 +37,19 @@ const Login = props => {
 
   const _handleSubmit = (e, client) => {
     e.preventDefault();
-    setLoggingIn(true);
-    // ApolloConsumer doesn't provide any error handling
-    client
-      .query({
-        query: adminChecked ? ADMIN_LOGIN_QUERY : REVIEWER_LOGIN_QUERY,
-        variables: { input: { username } },
-      })
-      .then(queryResult => _handleLogin(queryResult))
-      .catch(() => _handleLoginError());
+    if (!(password || username)) {
+      setError('Invalid credentials');
+    } else {
+      setLoggingIn(true);
+      // ApolloConsumer doesn't provide any error handling
+      client
+        .query({
+          query: adminChecked ? ADMIN_LOGIN_QUERY : REVIEWER_LOGIN_QUERY,
+          variables: { input: { username } },
+        })
+        .then(queryResult => _handleLogin(queryResult))
+        .catch(() => _handleLoginError());
+    }
   };
 
   const _handleLogin = queryResult => {
@@ -66,7 +76,7 @@ const Login = props => {
 
   const _handleLoginError = () => {
     setLoggingIn(false);
-    setError('Error logging in: check your credentials and network connection');
+    setError('');
     setPassword('');
   };
 
@@ -75,42 +85,52 @@ const Login = props => {
       <ApolloConsumer>
         {client => (
           <div>
-            <h1>Login</h1>
             {loggingIn && <h4>Logging...</h4>}
-            <h4>{error}</h4>
-            <form onSubmit={e => _handleSubmit(e, client)}>
-              <div>
-                <label htmlFor="username">Username:</label>
-                <input
-                  type="text"
+            {error && (
+              <Notification closeable kind={KIND.negative}>
+                {error}
+              </Notification>
+            )}
+            <form
+              className={LoginStyles.Form}
+              onSubmit={e => _handleSubmit(e, client)}
+            >
+              <FormControl label="Username">
+                <StatefulInput
                   autoFocus
+                  startEnhancer="@"
+                  type="text"
                   onChange={e => setUsername(e.target.value)}
-                  id="username"
                   value={username}
+                  size={SIZE.compact}
                 />
-              </div>
+              </FormControl>
 
-              <div>
-                <label htmlFor="password">Password:</label>
-                <input
+              <FormControl label="Password">
+                <StatefulInput
+                  startEnhancer="$"
                   type="password"
                   onChange={e => setPassword(e.target.value)}
-                  id="password"
                   value={password}
+                  size={SIZE.compact}
                 />
-              </div>
+              </FormControl>
 
-              <div>
-                <label htmlFor="scope">Login as admin?</label>
-                <input
-                  onChange={() => setAdminChecked(!adminChecked)}
-                  type="checkbox"
-                  id="scope"
+              <FormControl label="Admin ?">
+                <StatefulCheckbox
                   checked={adminChecked ? true : false}
+                  onChange={() => setAdminChecked(!adminChecked)}
                 />
-              </div>
+              </FormControl>
 
-              <button type="submit">Login</button>
+              <button type="submit">
+                <i
+                  style={{ marginRight: '0.5rem' }}
+                  className="fa fa-sign-in"
+                  aria-hidden="true"
+                />{' '}
+                Login
+              </button>
             </form>
           </div>
         )}
