@@ -97,7 +97,6 @@ const Login = props => {
             >
               <FormControl label="Username">
                 <StatefulInput
-                  autoFocus
                   startEnhancer="@"
                   type="text"
                   onChange={e => setUsername(e.target.value)}

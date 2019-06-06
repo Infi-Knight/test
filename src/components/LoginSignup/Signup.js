@@ -52,7 +52,6 @@ const Signup = props => {
       <form className={SignupStyles.Form}>
         <FormControl label="Username">
           <StatefulInput
-            autoFocus
             startEnhancer="@"
             type="text"
             onChange={e => setUsername(e.target.value)}
