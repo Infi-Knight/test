@@ -4,7 +4,7 @@ import history from '../../history';
 import AuthContext from '../Auth';
 import styles from './Header.module.css';
 
-const Header = props => {
+const Header = () => {
   const { authenticated, setAuthenticated } = useContext(AuthContext);
 
   const _handleLogout = () => {

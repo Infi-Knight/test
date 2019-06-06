@@ -92,7 +92,6 @@ const CreateReview = props => {
           }}
           onError={e => _handleGraphQlError(e)}
           onCompleted={data => {
-            console.log(data);
             props.history.push('/dashboard');
           }}
         >
