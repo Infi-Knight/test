@@ -14,28 +14,22 @@ const Header = props => {
 
   return (
     <header className={styles.Header}>
-      <div className={styles.HeaderGroup}>
-        <div className={styles.HeaderRow}>
-          <NavLink className={styles.Brand} to="/">
-            TEST
-          </NavLink>
-          {!authenticated ? (
-            <NavLink to="/login">
-              <button>Login</button>
-            </NavLink>
-          ) : (
-            <button onClick={_handleLogout}>Logout</button>
-          )}
-        </div>
-        <div className={styles.HeaderRow}>
-          <NavLink to="/create">
-            <button>Write a review</button>
-          </NavLink>
-          <NavLink to="/dashboard">
-            <button>Dashboard</button>
-          </NavLink>
-        </div>
-      </div>
+      <NavLink className={styles.Brand} to="/">
+        TEST
+      </NavLink>
+      {!authenticated ? (
+        <NavLink to="/login">
+          <button>Login</button>
+        </NavLink>
+      ) : (
+        <button onClick={_handleLogout}>Logout</button>
+      )}
+      <NavLink to="/create">
+        <button>Write a review</button>
+      </NavLink>
+      <NavLink to="/dashboard">
+        <button>Dashboard</button>
+      </NavLink>
     </header>
   );
 };
