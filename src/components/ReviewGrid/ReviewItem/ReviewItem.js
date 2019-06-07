@@ -52,26 +52,29 @@ const ReviewItem = props => {
           <div>Views: {props.views ? props.views : 0}</div>
           <div>Likes: {props.likes ? props.likes : 0}</div>
 
-          {scope === 'admin' && props.onDashboard && (
-            <Mutation
-              mutation={PUBLISH_REVIEW_MUTATION}
-              variables={{
-                data: { status: 'PUBLISHED' },
-                where: { id: props.id },
-              }}
-              onError={() => setError('Unable to publish review')}
-              onCompleted={() => history.push('/')}
-            >
-              {publishReviewMutation => (
-                <button
-                  onClick={publishReviewMutation}
-                  className={ReviewItemStyles.Action}
-                >
-                  Publish
-                </button>
-              )}
-            </Mutation>
-          )}
+          {scope === 'admin' &&
+            props.onDashboard &&
+            props.status !== 'PUBLISHED' && (
+              <Mutation
+                mutation={PUBLISH_REVIEW_MUTATION}
+                variables={{
+                  data: { status: 'PUBLISHED' },
+                  where: { id: props.id },
+                }}
+                onError={() => setError('Unable to publish review')}
+                onCompleted={() => history.push('/')}
+              >
+                {publishReviewMutation => (
+                  <button
+                    disabled={props.status === 'PUBLISHED' ? true : false}
+                    onClick={publishReviewMutation}
+                    className={ReviewItemStyles.Action}
+                  >
+                    Publish
+                  </button>
+                )}
+              </Mutation>
+            )}
 
           {props.onDashboard && (
             <Mutation

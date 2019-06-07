@@ -13,6 +13,7 @@ const ReviewGrid = props => {
               likes={post.likes}
               views={post.views}
               id={post.id}
+              status={post.status}
               title={post.title}
               image={post.image}
               body={post.body}

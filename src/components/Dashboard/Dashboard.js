@@ -14,6 +14,7 @@ const FETCH_REVIEWER_POSTS_QUERY = gql`
       username
       posts {
         title
+        status
         body
         id
         image
@@ -27,6 +28,7 @@ const FETCH_ALL_POSTS_QUERY = gql`
     posts {
       title
       id
+      status
       body
       image
       reviewer {
