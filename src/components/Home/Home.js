@@ -1,57 +1,22 @@
-import React from 'react';
-import { Button, SIZE } from 'baseui/button';
-import { graphql } from 'react-apollo';
+import React, { useState } from 'react';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Spinner } from 'baseui/spinner';
+import { Pagination } from 'baseui/pagination';
+import { Notification, KIND } from 'baseui/notification';
 
 import ReviewGrid from '../ReviewGrid';
 import HomeStyles from './Home.module.css';
 
 const POSTS_PER_PAGE = 6;
 
-const Home = props => {
-  let {
-    data: { loading, error, posts, postsConnection },
-    showMoreReviews,
-  } = props;
-
-  if (error) {
-    return <h1>Error fetching posts!</h1>;
-  }
-
-  if (posts && postsConnection) {
-    const totalPublishedPosts = postsConnection.edges.filter(
-      edge => edge.status === 'PUBLISHED'
-    ).length;
-    const areMorePosts = posts.length < totalPublishedPosts;
-
-    return (
-      <section>
-        <div className={HomeStyles.LoadMoreButton}>
-          {areMorePosts ? (
-            <Button
-              size={SIZE.compact}
-              disabled={loading}
-              onClick={() => showMoreReviews()}
-            >
-              {loading ? 'Loading...' : 'Load more reviews'}
-            </Button>
-          ) : (
-            <Button disabled>Load more reviews</Button>
-          )}
-        </div>
-
-        <ReviewGrid className={HomeStyles.ReviewGrid} posts={posts} />
-      </section>
-    );
-  }
-
-  return <Spinner />;
-};
-
-export const posts = gql`
-  query posts($input: PostWhereInput!, $first: Int!, $skip: Int!) {
-    posts(where: $input, orderBy: title_ASC, first: $first, skip: $skip) {
+const FETCH_PUBLISHED_REVIEWS_QUERY = gql`
+  query fetchPublishedPosts(
+    $input: PostWhereInput!
+    $first: Int!
+    $skip: Int!
+  ) {
+    posts(where: $input, orderBy: createdAt_DESC, first: $first, skip: $skip) {
       title
       body
       likes
@@ -72,35 +37,87 @@ export const posts = gql`
   }
 `;
 
-export const postQueryVars = {
+const publishedReviewsQueryVars = {
   input: { status: 'PUBLISHED' },
   skip: 0,
   first: POSTS_PER_PAGE,
 };
 
-export default graphql(posts, {
-  options: {
-    variables: postQueryVars,
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
-  },
-  props: ({ data }) => ({
-    data,
-    showMoreReviews: () => {
-      return data.fetchMore({
-        variables: {
-          skip: data.posts.length,
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          if (!fetchMoreResult) {
-            return previousResult;
-          }
+const Home = props => {
+  const [currentPage, setCurrentPage] = useState(1);
+  let requiredData;
 
-          return Object.assign({}, previousResult, {
-            posts: [...previousResult.posts, ...fetchMoreResult.posts],
-          });
-        },
-      });
-    },
-  }),
-})(Home);
+  return (
+    <div>
+      <Query
+        query={FETCH_PUBLISHED_REVIEWS_QUERY}
+        variables={publishedReviewsQueryVars}
+        notifyOnNetworkStatusChange={true}
+        fetchPolicy="cache-and-network"
+      >
+        {({ loading, error, data, fetchMore, updateQuery }) => {
+          if (loading) return <Spinner />;
+          if (error) {
+            return (
+              <Notification
+                autoHideDuration={1000}
+                closeable
+                kind={KIND.negative}
+              >
+                {`Error! ${error.message}`}
+              </Notification>
+            );
+          }
+          requiredData = data;
+
+          const totalPublishedPostsCount = data.postsConnection.edges.filter(
+            edge => edge.node.status === 'PUBLISHED'
+          ).length;
+
+          const numPages = Math.ceil(totalPublishedPostsCount / POSTS_PER_PAGE);
+
+          return (
+            <section>
+              <Pagination
+                overrides={{
+                  Root: {
+                    style: { width: '300px', margin: '2rem auto', padding: 0 },
+                  },
+                }}
+                numPages={numPages}
+                currentPage={currentPage}
+                onPageChange={({ nextPage }) => {
+                  setCurrentPage(Math.min(Math.max(nextPage, 1), numPages));
+                  fetchMore({
+                    variables: {
+                      skip: data.posts.length,
+                    },
+                    updateQuery: (previousResult, { fetchMoreResult }) => {
+                      if (!fetchMoreResult) {
+                        requiredData = {
+                          posts: previousResult.posts.map(post => post),
+                        };
+                        return requiredData;
+                      } else {
+                        requiredData = {
+                          posts: fetchMoreResult.posts.map(post => post),
+                        };
+                        return requiredData;
+                      }
+                    },
+                  });
+                }}
+              />
+              <ReviewGrid
+                className={HomeStyles.ReviewGrid}
+                posts={requiredData.posts}
+              />
+            </section>
+          );
+        }}
+      </Query>
+    </div>
+  );
+};
+
+export default Home;
