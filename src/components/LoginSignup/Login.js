@@ -5,6 +5,7 @@ import { FormControl } from 'baseui/form-control';
 import { StatefulInput, SIZE } from 'baseui/input';
 import { Notification, KIND } from 'baseui/notification';
 import { StatefulCheckbox } from 'baseui/checkbox';
+import { Spinner } from 'baseui/spinner';
 
 import LoginStyles from './LoginSignup.module.css';
 import AuthContext from '../Auth';
@@ -76,8 +77,7 @@ const Login = props => {
 
   const _handleLoginError = () => {
     setLoggingIn(false);
-    setError('');
-    setPassword('');
+    setError('User not found');
   };
 
   return (
@@ -85,7 +85,7 @@ const Login = props => {
       <ApolloConsumer>
         {client => (
           <div>
-            {loggingIn && <h4>Logging...</h4>}
+            {loggingIn && <Spinner />}
             {error && (
               <Notification closeable kind={KIND.negative}>
                 {error}

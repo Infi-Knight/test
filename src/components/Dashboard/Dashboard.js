@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+
+import DashboardStyles from './Dashboard.module.css';
 import AuthContext from '../Auth';
 import ReviewGrid from '../ReviewGrid';
 
@@ -48,9 +50,17 @@ const Dashboard = () => {
           if (loading) return null;
           if (error) return `Error! ${error.message}`;
           return (
-            <div>
-              <button onClick={() => refetch()}>Refresh dashboard</button>
-              <ReviewGrid posts={admin ? data.posts : data.reviewer.posts} />
+            <div className={DashboardStyles.DashboardContainer}>
+              <button
+                className={DashboardStyles.RefreshButton}
+                onClick={() => refetch()}
+              >
+                Refresh dashboard
+              </button>
+              <ReviewGrid
+                onDashboard={true}
+                posts={admin ? data.posts : data.reviewer.posts}
+              />
             </div>
           );
         }}

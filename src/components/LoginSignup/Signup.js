@@ -26,8 +26,8 @@ const Signup = props => {
   const { setAuthenticated } = useContext(AuthContext);
 
   const _validateForm = signupMutation => {
-    if (!password || !password2 || password !== password2) {
-      setError('Password error');
+    if (!username || !password || !password2 || password !== password2) {
+      setError('Invalid input');
       setPassword('');
       setPassword2('');
     } else {
