@@ -54,6 +54,7 @@ const Signup = props => {
           <StatefulInput
             startEnhancer="@"
             type="text"
+            autocomplete="username"
             onChange={e => setUsername(e.target.value)}
             value={username}
             size={SIZE.compact}
@@ -64,6 +65,7 @@ const Signup = props => {
           <StatefulInput
             startEnhancer="$"
             type="password"
+            autocomplete="new-password"
             onChange={e => setPassword(e.target.value)}
             value={password}
             size={SIZE.compact}
@@ -74,6 +76,7 @@ const Signup = props => {
           <StatefulInput
             startEnhancer="$"
             type="password"
+            autocomplete="new-password"
             onChange={e => setPassword2(e.target.value)}
             value={password2}
             size={SIZE.compact}
