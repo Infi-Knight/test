@@ -16,6 +16,17 @@ const DELETE_REVIEW_MUTATION = gql`
   }
 `;
 
+const PUBLISH_REVIEW_MUTATION = gql`
+  mutation publishReviewMutation(
+    $data: PostUpdateInput!
+    $where: PostWhereUniqueInput!
+  ) {
+    updatePost(data: $data, where: $where) {
+      id
+    }
+  }
+`;
+
 const ReviewItem = props => {
   const [error, setError] = useState('');
   const { scope } = useContext(AuthContext);
@@ -42,17 +53,32 @@ const ReviewItem = props => {
           <div>Likes: {props.likes ? props.likes : 0}</div>
 
           {scope === 'admin' && props.onDashboard && (
-            <button className={ReviewItemStyles.Action}>Publish</button>
+            <Mutation
+              mutation={PUBLISH_REVIEW_MUTATION}
+              variables={{
+                data: { status: 'PUBLISHED' },
+                where: { id: props.id },
+              }}
+              onError={() => setError('Unable to publish review')}
+              onCompleted={() => history.push('/')}
+            >
+              {publishReviewMutation => (
+                <button
+                  onClick={publishReviewMutation}
+                  className={ReviewItemStyles.Action}
+                >
+                  Publish
+                </button>
+              )}
+            </Mutation>
           )}
 
           {props.onDashboard && (
             <Mutation
               mutation={DELETE_REVIEW_MUTATION}
               variables={{ input: { id: props.id } }}
-              onError={() => setError('Unable to delete Review')}
-              onCompleted={() => {
-                history.push('/');
-              }}
+              onError={() => setError('Unable to delete review')}
+              onCompleted={() => history.push('/')}
             >
               {deletePostMutation => (
                 <button
