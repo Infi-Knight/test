@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Spinner } from 'baseui/spinner';
-import { Pagination } from 'baseui/pagination';
+import { Button, SIZE } from 'baseui/button';
 import { Notification, KIND } from 'baseui/notification';
 
 import ReviewGrid from '../ReviewGrid';
@@ -16,7 +16,7 @@ const FETCH_PUBLISHED_REVIEWS_QUERY = gql`
     $first: Int!
     $skip: Int!
   ) {
-    posts(where: $input, orderBy: createdAt_DESC, first: $first, skip: $skip) {
+    posts(where: $input, orderBy: createdAt_ASC, first: $first, skip: $skip) {
       title
       body
       likes
@@ -44,79 +44,73 @@ const publishedReviewsQueryVars = {
 };
 
 const Home = props => {
-  const [currentPage, setCurrentPage] = useState(1);
-  let requiredData;
-
+  const [areMorePosts, setAreMorePosts] = useState(false);
   return (
-    <div>
-      <Query
-        query={FETCH_PUBLISHED_REVIEWS_QUERY}
-        variables={publishedReviewsQueryVars}
-        notifyOnNetworkStatusChange={true}
-        fetchPolicy="cache-and-network"
-      >
-        {({ loading, error, data, fetchMore, updateQuery }) => {
-          if (loading) return <Spinner />;
-          if (error) {
-            return (
-              <Notification
-                autoHideDuration={1000}
-                closeable
-                kind={KIND.negative}
-              >
-                {`Error! ${error.message}`}
-              </Notification>
-            );
-          }
-          requiredData = data;
-
-          const totalPublishedPostsCount = data.postsConnection.edges.filter(
-            edge => edge.node.status === 'PUBLISHED'
-          ).length;
-
-          const numPages = Math.ceil(totalPublishedPostsCount / POSTS_PER_PAGE);
-
+    <Query
+      query={FETCH_PUBLISHED_REVIEWS_QUERY}
+      variables={publishedReviewsQueryVars}
+      notifyOnNetworkStatusChange={true}
+      fetchPolicy="cache-and-network"
+    >
+      {({ loading, error, data, fetchMore, updateQuery }) => {
+        if (loading) return <Spinner />;
+        if (error) {
           return (
-            <section>
-              <Pagination
-                overrides={{
-                  Root: {
-                    style: { width: '300px', margin: '2rem auto', padding: 0 },
-                  },
-                }}
-                numPages={numPages}
-                currentPage={currentPage}
-                onPageChange={({ nextPage }) => {
-                  setCurrentPage(Math.min(Math.max(nextPage, 1), numPages));
-                  fetchMore({
-                    variables: {
-                      skip: data.posts.length,
-                    },
-                    updateQuery: (previousResult, { fetchMoreResult }) => {
-                      if (!fetchMoreResult) {
-                        requiredData = {
-                          posts: previousResult.posts.map(post => post),
-                        };
-                        return requiredData;
-                      } else {
-                        requiredData = {
-                          posts: fetchMoreResult.posts.map(post => post),
-                        };
-                        return requiredData;
-                      }
-                    },
-                  });
-                }}
-              />
-              <ReviewGrid
-                className={HomeStyles.ReviewGrid}
-                posts={requiredData.posts}
-              />
-            </section>
+            <Notification
+              autoHideDuration={1000}
+              closeable
+              kind={KIND.negative}
+            >
+              {`Error! ${error.message}`}
+            </Notification>
           );
-        }}
-      </Query>
-    </div>
+        }
+
+        const totalPublishedPostsCount = data.postsConnection.edges.filter(
+          edge => edge.node.status === 'PUBLISHED'
+        ).length;
+
+        setAreMorePosts(
+          data.posts.length < totalPublishedPostsCount ? true : false
+        );
+
+        return (
+          <div className={HomeStyles.HomeContainer}>
+            <div className={HomeStyles.LoadMoreButton}>
+              {areMorePosts ? (
+                <button
+                  disabled={!areMorePosts}
+                  onClick={() => {
+                    return fetchMore({
+                      variables: {
+                        skip: data.posts.length,
+                      },
+                      updateQuery: (previousResult, { fetchMoreResult }) => {
+                        if (!fetchMoreResult) {
+                          setAreMorePosts(false);
+                          return previousResult;
+                        }
+                        return Object.assign({}, previousResult, {
+                          posts: [
+                            ...fetchMoreResult.posts,
+                            ...previousResult.posts,
+                          ],
+                        });
+                      },
+                    });
+                  }}
+                >
+                  Load more reviews
+                </button>
+              ) : (
+                <button disabled>No more reviews</button>
+              )}
+            </div>
+            <ReviewGrid posts={data.posts} />
+          </div>
+        );
+      }}
+    </Query>
   );
 };
 

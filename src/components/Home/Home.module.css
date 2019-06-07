@@ -1,9 +1,19 @@
+.HomeContainer {
+  margin-bottom: 4rem;
+}
+
 .LoadMoreButton {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-section {
-  margin-bottom: 4rem;
+button:disabled {
+  border: none;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background: #d0021b;
+  color: white;
 }
