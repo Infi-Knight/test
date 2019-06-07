@@ -9,6 +9,7 @@ const ReviewGrid = props => {
         {props.posts.map(post => (
           <li key={post.id}>
             <ReviewItem
+              history={props.history}
               onDashboard={props.onDashboard}
               likes={post.likes}
               views={post.views}

@@ -71,6 +71,7 @@ const CreateReview = props => {
         <FormControl label="Image">
           <StatefulInput
             type="text"
+            placeholder="Link to the image"
             onChange={e => setImage(e.target.value)}
             value={image}
             size={SIZE.compact}
@@ -91,7 +92,7 @@ const CreateReview = props => {
             },
           }}
           onError={e => _handleGraphQlError(e)}
-          onCompleted={data => {
+          onCompleted={() => {
             props.history.push('/dashboard');
           }}
         >
