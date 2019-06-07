@@ -35,7 +35,7 @@ const ReviewItem = props => {
     <Card
       overrides={{
         Root: {
-          style: { width: '300px' },
+          style: { width: '300px', height: '260px' },
         },
       }}
       title={props.title}
@@ -44,10 +44,11 @@ const ReviewItem = props => {
         <StyledThumbnail src={props.image} />
       </NavLink>
       <StyledBody>
-        <NavLink to={`/review/${props.id}`}>{`${props.body.substring(
-          0,
-          140
-        )}...`}</NavLink>
+        <div className={ReviewItemStyles.Body}>
+          <NavLink to={`/review/${props.id}`}>
+            {`${props.body.substring(0, 140)}...`}
+          </NavLink>
+        </div>
         <div className={ReviewItemStyles.LikeViewContainer}>
           <div>Views: {props.views ? props.views : 0}</div>
           <div>Likes: {props.likes ? props.likes : 0}</div>

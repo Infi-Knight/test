@@ -3,6 +3,10 @@ a {
   color: #5f6368;
 }
 
+.Body {
+  min-height: 140px;
+}
+
 .LikeViewContainer {
   display: flex;
   justify-content: space-between;
