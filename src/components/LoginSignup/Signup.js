@@ -45,7 +45,7 @@ const Signup = props => {
   return (
     <div>
       {error && (
-        <Notification closeable kind={KIND.negative}>
+        <Notification autoHideDuration={1000} closeable kind={KIND.negative}>
           {error}
         </Notification>
       )}

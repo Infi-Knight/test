@@ -37,9 +37,11 @@ const ReviewPage = ({ match }) => {
           if (loading) return null;
           if (error)
             return (
-              <Notification kind={KIND.negative} closeable>{`Error! ${
-                error.message
-              }`}</Notification>
+              <Notification
+                autoHideDuration={1000}
+                kind={KIND.negative}
+                closeable
+              >{`Error! ${error.message}`}</Notification>
             );
           const { title, body, image, reviewer, likes, createdAt } = data.post;
           return (
@@ -62,7 +64,7 @@ const ReviewPage = ({ match }) => {
                     reviewer.username
                   }`}</h4>
                   <h5 style={{ margin: '0' }}>{`${dayjs(createdAt).format(
-                    ' MMMM D YYYY'
+                    ' MMMM D, YYYY'
                   )}`}</h5>
                   <p>{body}</p>
                 </div>

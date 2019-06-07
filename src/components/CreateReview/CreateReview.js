@@ -1,7 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { FormControl } from 'baseui/form-control';
+import { StatefulInput, SIZE } from 'baseui/input';
+import { StatefulTextarea as Textarea } from 'baseui/textarea';
+import { Notification, KIND } from 'baseui/notification';
 
+import CreateReviewStyles from './CreateReview.module.css';
 import AuthContext from '../Auth';
 const CREATE_POST_MUTATION = gql`
   mutation createPostMutation($input: PostCreateInput!) {
@@ -39,43 +44,38 @@ const CreateReview = props => {
   };
 
   return (
-    <div>
-      <h1>Write a review</h1>
-      <h4>{error}</h4>
+    <div className={CreateReviewStyles.CreateReviewContainer}>
+      {error && (
+        <Notification autoHideDuration={1000} closeable kind={KIND.negative}>
+          {error}
+        </Notification>
+      )}
       <form>
-        <div>
-          <label htmlFor="title">Title:</label>
-          <input
-            autoFocus
-            placeholder="Title of your post"
+        <FormControl label="Title">
+          <StatefulInput
+            type="text"
             onChange={e => setTitle(e.target.value)}
-            type="text"
-            id="title"
             value={title}
+            size={SIZE.compact}
           />
-        </div>
+        </FormControl>
 
-        <div>
-          <label>
-            Body:
-            <textarea
-              placeholder="Description"
-              value={body}
-              onChange={e => setBody(e.target.value)}
-            />
-          </label>
-        </div>
+        <FormControl label="Description">
+          <Textarea
+            value={body}
+            onChange={e => setBody(e.target.value)}
+            size={SIZE.compact}
+          />
+        </FormControl>
 
-        <div>
-          <label htmlFor="image">Image:</label>
-          <input
+        <FormControl label="Image">
+          <StatefulInput
             type="text"
-            placeholder="Image link"
-            id="image"
             onChange={e => setImage(e.target.value)}
             value={image}
+            size={SIZE.compact}
           />
-        </div>
+        </FormControl>
 
         <Mutation
           mutation={CREATE_POST_MUTATION}

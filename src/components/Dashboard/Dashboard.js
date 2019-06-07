@@ -52,9 +52,11 @@ const Dashboard = () => {
           if (loading) return null;
           if (error)
             return (
-              <Notification kind={KIND.negative} closeable>{`Error! ${
-                error.message
-              }`}</Notification>
+              <Notification
+                autoHideDuration={1000}
+                kind={KIND.negative}
+                closeable
+              >{`Error! ${error.message}`}</Notification>
             );
           return (
             <div className={DashboardStyles.DashboardContainer}>
