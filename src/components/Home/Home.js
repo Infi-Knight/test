@@ -2,17 +2,14 @@ import React from 'react';
 import { Button, SIZE } from 'baseui/button';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Spinner } from 'baseui/spinner';
 
 import ReviewGrid from '../ReviewGrid';
 import HomeStyles from './Home.module.css';
 
-/* TODO: comment out this logger when in production */
-// import logQueryResult from '../../utils/dev/logQueryResult';
-
 const POSTS_PER_PAGE = 6;
 
 const Home = props => {
-  // logQueryResult(props, 'posts', true); // TODO: comment out  in production
   let {
     data: { loading, error, posts, postsConnection },
     showMoreReviews,
@@ -49,7 +46,7 @@ const Home = props => {
     );
   }
 
-  return <h2>Loading posts...</h2>;
+  return <Spinner />;
 };
 
 export const posts = gql`

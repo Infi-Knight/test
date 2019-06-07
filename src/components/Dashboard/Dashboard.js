@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Spinner } from 'baseui/spinner';
+import { Notification, KIND } from 'baseui/notification';
 
 import DashboardStyles from './Dashboard.module.css';
 import AuthContext from '../Auth';
@@ -46,9 +48,14 @@ const Dashboard = () => {
         fetchPolicy="cache-and-network"
       >
         {({ loading, error, data, refetch, networkStatus }) => {
-          if (networkStatus === 4) return 'Refreshing!';
+          if (networkStatus === 4) return <Spinner />;
           if (loading) return null;
-          if (error) return `Error! ${error.message}`;
+          if (error)
+            return (
+              <Notification kind={KIND.negative} closeable>{`Error! ${
+                error.message
+              }`}</Notification>
+            );
           return (
             <div className={DashboardStyles.DashboardContainer}>
               <button

@@ -2,6 +2,9 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import dayjs from 'dayjs';
+import { Spinner } from 'baseui/spinner';
+import { Notification, KIND } from 'baseui/notification';
+
 import ReviewPageStyles from './ReviewPage.module.css';
 
 const FETCH_REVIEW_QUERY = gql`
@@ -30,9 +33,14 @@ const ReviewPage = ({ match }) => {
         fetchPolicy="cache-and-network"
       >
         {({ loading, error, data, networkStatus }) => {
-          if (networkStatus === 4) return 'Refreshing!';
+          if (networkStatus === 4) return <Spinner />;
           if (loading) return null;
-          if (error) return `Error! ${error.message}`;
+          if (error)
+            return (
+              <Notification kind={KIND.negative} closeable>{`Error! ${
+                error.message
+              }`}</Notification>
+            );
           const { title, body, image, reviewer, likes, createdAt } = data.post;
           return (
             <div className={ReviewPageStyles.ReviewContainer}>
