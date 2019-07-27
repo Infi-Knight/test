@@ -1,6 +1,6 @@
 # Test
 
-Screening task for Redcarpetup internship. A prototype web app for a simple review site. The app is highly insecure owing to limitations imposed by CMS and absence of a proxy server to handle security. 
+A prototype web app for a simple review site. 
 
 ### Tech stack
 
