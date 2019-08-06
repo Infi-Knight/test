@@ -2,7 +2,7 @@
 
 # Inq
 
-A prototype web app for a simple review site. 
+Frontend prototype for a simple review site.
 
 ### Tech stack
 
