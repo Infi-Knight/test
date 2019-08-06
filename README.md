@@ -1,10 +1,12 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/adb3887e-4a9f-48c9-b25f-f65ebdfeb2bc/deploy-status)](https://app.netlify.com/sites/inq/deploys)
+
 # Inq
 
 A prototype web app for a simple review site. 
 
 ### Tech stack
 
-React (uses react hooks🥳), GraphQL, GraphCMS. Deployed using Now - Zeit.
+React (uses react hooks🥳), GraphQL, GraphCMS.
 
 ### Todo
 
