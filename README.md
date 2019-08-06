@@ -1,4 +1,4 @@
-# Test
+# Inq
 
 A prototype web app for a simple review site. 
 
