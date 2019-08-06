@@ -15,7 +15,7 @@ const Header = () => {
   return (
     <header className={styles.Header}>
       <NavLink className={styles.Brand} to="/">
-        TEST
+        Inq
       </NavLink>
       {!authenticated ? (
         <NavLink to="/login">
