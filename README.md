@@ -13,6 +13,8 @@ Frontend prototype for a simple review site.
 - reviewer has a dashboard, where he can see reviews written by him and also post new reviews.
 - admin has dashboard - where he can see reviews written by everyone and do approval and reject. 
 
+- admin credentials: username- ravi, password- 123456
+
 ### Tech stack
 
 React (uses react hooks🥳), GraphQL, GraphCMS.
