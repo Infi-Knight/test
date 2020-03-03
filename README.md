@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e2bbdd0f6434914972142376b19002c)](https://app.codacy.com/manual/soniravi829/inq?utm_source=github.com&utm_medium=referral&utm_content=Infi-Knight/inq&utm_campaign=Badge_Grade_Dashboard)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/adb3887e-4a9f-48c9-b25f-f65ebdfeb2bc/deploy-status)](https://app.netlify.com/sites/inq/deploys)
 
 # Inq
