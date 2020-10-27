@@ -3,7 +3,7 @@
 
 # Inq
 
-Frontend prototype for a simple review site.
+A simple review site.
 
 - There are two kinds of users: reviewers and admins.
 - reviewer can sign up using username + password
